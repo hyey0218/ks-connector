@@ -16,9 +16,9 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/k_search_forensic_nts_connector/lib/kmp-1.1.4.jar"/>
-	<classpathentry kind="lib" path="/k_search_forensic_nts_connector/lib/konan-commons-1.4.jar"/>
-	<classpathentry kind="lib" path="/k_search_forensic_nts_connector/lib/konan-connector-2.1.1.jar"/>
-	<classpathentry kind="lib" path="/k_search_forensic_nts_connector/lib/connector-console-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/connector-console-2.1.1.jar" sourcepath="lib/connector-console-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/kmp-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/konan-commons-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/konan-connector-2.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

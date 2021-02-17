@@ -22,6 +22,14 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.30</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.30</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -32,6 +40,37 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>kmp</groupId>
+			<artifactId>kmp</artifactId>
+			<version>1.1.4</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kmp-1.1.4.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>connector-console</groupId>
+			<artifactId>connector-console</artifactId>
+			<version>2.1.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/connector-console-2.1.1.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>konan-commons</groupId>
+			<artifactId>konan-commons</artifactId>
+			<version>1.4</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/konan-commons-1.4.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>konan-connector</groupId>
+			<artifactId>konan-connector</artifactId>
+			<version>2.1.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/konan-connector-2.1.1.jar</systemPath>
+		</dependency>
+
+
 
 	</dependencies>
 
@@ -48,6 +87,7 @@
 				</configuration>
 			</plugin>
 
+			<!-- jar 생성시 meven 의존 lib 도 함께 들어간다. mvn assembly:assembly -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -59,8 +99,25 @@
 				</configuration>
 			</plugin>
 
-
-
+			<!-- meven 의존 lib 들을 따로 빼서 저장한다. mvn dependency:copy-dependencies -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectory>target/dependencies</outputDirectory>
+					<overWriteIfNewer>true</overWriteIfNewer>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
