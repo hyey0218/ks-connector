@@ -1,18 +1,17 @@
 package com.konantech.forensic.vo;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
 @AllArgsConstructor
 @Builder
-public class Record {
-	
-	Long filesize;
-	List<TagInfo> tags;
-	
-	
+@Getter
+@Setter
+public class EngineInfo {
+	short engineNo;
+	String engineName;
+	Long fileSizeInCharge;
+
 }

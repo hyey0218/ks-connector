@@ -1,0 +1,245 @@
+file_type  :[0]
+filter_mode:[2]
+RC:[0]
+Body:[15009]
+..FILE:baseinfo.xml
+..DEPTH:1
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_1.xml
+..FILESIZE:333
+..SUMMARY_BEGIN
+Format : [XML document text]
+Program : [XML (Extensible Markup Language) File Format]
+..SUMMARY_END
+..RETURN_CODE:0
+konantech
+http://gw.konantech.com:9940/upload/PC/messenger/update
+http://gw.konantech.com:9940/BizboxPcGateway/Intro/GetProtocolCheck
+N
+H:
+N
+..FILE_END
+..FILE:hyey4@naver.com.pst
+..DEPTH:1
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_2.pst
+..FILESIZE:7128064
+..SUMMARY_BEGIN
+Format : [PST (Outlook Personal Folders File)]
+..SUMMARY_END
+..RETURN_CODE:0
+..EMAIL
+--------- 원본 메일 ---------
+보낸사람: 조혜윤 <hyey0218@daum.net>
+받는사람: 조혜윤 <hyey0218@daum.net>
+날짜: 20.05.13 16:45 GMT +0900
+제목: [Maven Project 로 단순 특정 기능이 있는 SDK용 jar 만들어서 다른 Maven Project(Spring boot) 에서 import 해서 쓰기]
+[Maven Project 로 단순 특정 기능이 있는 SDK용 jar 만들어서 다른 Maven Project(Spring boot) 에서 import 해서 쓰기]
+1. Maven Project 생성해서 단순 자바 패키지 만듬
+2. mvn install
+-> mvn install
+-> 내 로컬 repository 에 생성한 나의 dependency가 생성됨
+3. local maven repository 로 이동해서 dependency 정보 얻기 (mvn repo: C:\users~~~\.m2\repository임) 
+-> 거기에 ~~.pom 파일 열면 dependency 정보 있는거 복사
+<dependency>
+<groupId>konantech.kwc.dataparse</groupId>
+<artifactId>kwc-dataparse</artifactId>
+<version>0.0.1-SNAPSHOT</version>
+</dependency>
+4. Spring boot project에 dependency 추가해줌
+5. spring boot project 의 maven package 해주면 잘됨
+<https://confirm.mail.daum.net/confirmapi/v1/users/hyey0218%40hanmail%2Enet/cmails/20210114105541%2ER_Jek3SMQDumDXxANuD7hg%40hyey0218%2Ehanmail%2Enet/recipients/hyey4%40naver%2Ecom> 
+..META_SUBJECT
+FW: [Maven Project 로 단순 특정 기능이 있는 SDK용 jar 만들어서 다른 Maven Project(Spring boot) 에서 import 해서 쓰기]
+..META_FROM
+조혜윤 hyey0218@daum.net
+..META_TO
+hyey4 hyey4@naver.com
+..META_DATE
+2021-01-14T10:55:44.000
+..META_RECEIVED_DATE
+2021-01-14T10:55:41.000
+..EMAIL
+교보문고 <http://ems1.kyobobook.co.kr/2I-120618I-477247I-4goaSoZE-8zPqrCF-1203565I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuI-3> 
+국내도서 <http://ems1.kyobobook.co.kr/5I-120618I-477247I-4goaSoZE-8zPqrCF-1203566I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7SHJPKMCuD-6aBmF-3bBaajvF-1MOtI-3> 외국도서 <http://ems1.kyobobook.co.kr/3I-120618I-477247I-4goaSoZE-8zPqrCF-1203567I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7SHJPKiHED-6aBmF-3bBaajvF-1irjI-3> eBook <http://ems1.kyobobook.co.kr/5I-120618I-477247I-4goaSoZE-8zPqrCF-1203568I-4ehhgE-8D-7D-7JSEShBaD-6ZACvCvCCZD-6oCD-6ZuD-7JSEShBaD-7PvCCZD-7PvCCZNBSHD-6SHZI-3> sam <http://ems1.kyobobook.co.kr/6I-120618I-477247I-4goaSoZE-8zPqrCF-1203569I-4ehhgE-8D-7D-7zBbD-6ZACvCvCCZD-6oCD-6ZuD-7zvDPvD-7zBboaUvD-7zBboaUvNBSHD-6SHZI-3> 음반 <http://ems1.kyobobook.co.kr/2I-120618I-477247I-4goaSoZE-8zPqrCF-1203570I-4ehhgE-8D-7D-7bUzSoD-6ZACvCvCCZD-6oCD-6ZuD-7ehD-7uPoCuJNBSHI-3> DVD <http://ems1.kyobobook.co.kr/6I-120618I-477247I-4goaSoZE-8zPqrCF-1203571I-4ehhgE-8D-7D-7bUzSoD-6ZACvCvCCZD-6oCD-6ZuD-7ehD-7JcJNBSHI-3> 기프트 <http://ems1.kyobobook.co.kr/4I-120618I-477247I-4goaSoZE-8zPqrCF-1203572I-4ehhgE-8D-7D-7ESmhD-6ZACvCvCCZD-6oCD-6ZuD-7ehD-7ESmhNBSHI-3> 중고장터 <http://ems1.kyobobook.co.kr/6I-120618I-477247I-4goaSoZE-8zPqrCF-1203573I-4ehhgE-8D-7D-7UzPJD-6ZACvCvCCZD-6oCD-6ZuD-7SHJPKD-6SHZI-3> 베스트 <http://ems1.kyobobook.co.kr/1I-120618I-477247I-4goaSoZE-8zPqrCF-1203574I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7vPzhRPaaPurPDD-7vPzhzPaaPuD-6aBmI-3> 스테디 <http://ems1.kyobobook.co.kr/4I-120618I-477247I-4goaSoZE-8zPqrCF-1203575I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7vPzhRPaaPurPDD-7zhPBJAzPaaPuD-6aBmI-3> 신상품 <http://ems1.kyobobook.co.kr/8I-120618I-477247I-4goaSoZE-8zPqrCF-1203576I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7HPDguCJUohD-7HPDsuCJUohLHJPKNBSHD-6aBmI-3> 추천 <http://ems1.kyobobook.co.kr/8I-120618I-477247I-4goaSoZE-8zPqrCF-1203577I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7uPoCbbgBEPD-7uPoCbbFCCZNBSHD-6aBmI-3> 
+<http://ems1.kyobobook.co.kr/3I-120618I-477247I-4goaSoZE-8zPqrCF-1203578I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7oUahUuPD-7oUahUuPfaBzzSoGPhBSaD-6aBmF-3zPucSoPjvF-1MkTC-8BbgE-9zPucSoPfJF-170I-3> 
+<http://image.kyobobook.co.kr/ink/images/prom/mail/2016/Target/160204/bnF_01.jpg> 
+교보문고 <http://ems1.kyobobook.co.kr/9I-120618I-477247I-4goaSoZE-8zPqrCF-1203579I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuI-3> 2021년 1월 14일, 고객님의 메일 수신옵션을 확인한 후 보내드리는 발신전용 메일입니다.
+특정 메일만을 받아보시거나, 더 이상 받지 않으시려면 [수신거부] <http://ems1.kyobobook.co.kr/7I-120618I-477247I-4goaSoZE-8zPqrCF-1203580I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7bAuCCbD-7PbBSatPpPohICubD-6aBmF-3bPbHCF-152012155497C-8BbgE-9PbBSaF-1eAPA4F-4HBcPuD-6oCbI-3> 버튼을 눌러주세요.
+(If you don’t want receive this mail anymore, click here <http://ems1.kyobobook.co.kr/3I-120618I-477247I-4goaSoZE-8zPqrCF-1203581I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7bAuCCbD-7PbBSatPpPohICubD-6aBmF-3bPbHCF-152012155497C-8BbgE-9PbBSaF-1eAPA4F-4HBcPuD-6oCbI-3> .)
+저희 교보문고는 방송통신위원회 권고사항에 따라 메일을 제작, 발송하고 있습니다.
+문의사항은 FAQ <http://ems1.kyobobook.co.kr/9I-120618I-477247I-4goaSoZE-8zPqrCF-1203582I-4ehhgE-8D-7D-7DDDD-6ZACvCvCCZD-6oCD-6ZuD-7ozoPHhPuD-7ozfPHhPuNBSHD-6aBmI-3> 를 이용해 주시기 바랍니다. | 고객센터 1544-1900
+전송자 : 인터넷교보문고 | 대표이사 : 박영규 
+통신판매신고번호 : 제 653호 | 사업자등록번호 : 102-81-11670
+주소 : 서울시 종로구 종로 1 (주)교보문고
+<http://ems1.kyobobook.co.kr/5I-120618I-477247I-4uPmuPzeI-4I-3> 
+..META_SUBJECT
+(광고) [교보인문학석강] 새해 첫 클래식, 쇼팽과 리스트 어떠세요? 집콕하며 클래식 강연
+..META_FROM
+인터넷교보문고 no-reply@kyobobook.co.kr
+..META_TO
+조혜윤님 hyey4@naver.com
+..META_DATE
+2021-01-14T11:45:36.000
+..META_RECEIVED_DATE
+2021-01-14T11:45:36.000
+..EMAIL
+<http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1P> 
+L.POINT <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwMQ==&URL=https://www.lpoint.com/> 1월 L.POINT E-mail명세서 
+L.POINT 명세서가 도착을했습니다.<https://www.lpoint.com/email/layout/txt_title_statement.png> 
+조혜윤님의 2020년 12월 31일 기준 L.POINT 안내입니다. 
+이용하신 L.POINT 상세내역은 L.POINT 홈페이지에서 확인 가능합니다. 
+잔여 L.POINT 844P 사용가능 L.POINT 844P 
+L.POINT 제공포인트 844P 
+롯데카드 제공포인트 0P 
+12월 적립 포인트 44P 
+12월 사용 포인트 0P 
+※ 롯데카드에서 제공해드린 포인트는 유효기간 없이 사용 가능하시며,
+롯데카드 외 각 제휴사에서 적립해드린 L.POINT의 유효기간은 적립 월로부터 5년입니다. 
+상세내역 조회 <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwMg==&URL=https://www.lpoint.com/pages/etc/all_bridge.html?redirectId=23> 소멸포인트상세내역 <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwMw==&URL=https://www.lpoint.com/pages/etc/all_bridge.html?redirectId=31> 
+L.POINT를 더 빠르게 적립하는 방법! L.POINT APP <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwNA==&URL=https://m.lpoint.com/app/common/LWZZ400100.do> 설문만으로도 L.POINT가 쏟아지는 LIME <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwNQ==&URL=https://www.lime-in.co.kr> 
+본 메일은 정보통신망 이용촉진 및 정보보호 등에 관한 법률에 의거 회원님의 L.POINT 이메일 수신 정보를 확인 결과(기준일:2020년 12월 31일)
+동의하신 회원님께 발송 드리는 메일로써 L.POINT카드 발급 혹은 L.POINT 홈페이지 회원 가입이나 회원정보 변경 시 제공해주신 이메일 주소로
+발송하는 발신전용 메일입니다. 
+마케팅 이메일 수신을 원하지 않을 경우, 번거로우시더라도 아래 방법을 통해 E-Mail 수신 여부를 변경하시기 바랍니다.
+[L.POINT 홈페이지 > 로그인] <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwNg==&URL=https://www.lpoint.com/pages/etc/all_bridge.html?redirectId=24> > MY L > 회원정보 > 회원정보 확인/변경 페이지 > E-Mail 수신 여부 변경
+본 메일과 관련된 문의사항은 고객센터를 이용하시기 바랍니다.
+To unsubscribe L.POINT marketing emails, please click here. <http://send01.lpoint.com:80/Check.html?TV9JRD0wMDI5ODIzNzc5XzE0MjQ5ODMw&U1RZUEU9QVVUTw==&TElTVF9UQUJMRT1FTVNfQVVUT19TRU5EX0xJU1RfMDE=&UE9TVF9JRD0yMDIxMDExMl81MQ==&VEM9MjAyMTAyMTE=&U0VSVkVSX0lEPTAz&S0lORD1D&Q0lEPTAwNw==&URL=https://www.lpoint.com/pages/etc/all_bridge.html?redirectId=24> 
+<https://www.lpoint.com/email/layout/edm_mkt_v2_footer.png> 
+..META_SUBJECT
+(광고)[L.POINT] 1월 포인트 명세서 조혜윤님의 적립/사용/소멸 예정 포인트는?
+..META_FROM
+L.POINT marketing@lpoint.com
+..META_TO
+조혜윤 hyey4@naver.com
+..META_DATE
+2021-01-14T14:13:02.000
+..META_RECEIVED_DATE
+2021-01-14T14:12:34.000
+..EMAIL
+zzㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅇㅇ
+<https://confirm.mail.daum.net/confirmapi/v1/users/hyey0218%40hanmail%2Enet/cmails/20210114150040%2E5wDbNx6zRrao1JbuDQAw7Q%40hyey0218%2Ehanmail%2Enet/recipients/hyey4%40naver%2Ecom> 
+..META_SUBJECT
+테스트!!
+..META_FROM
+조혜윤 hyey0218@daum.net
+..META_TO
+hyey4 hyey4@naver.com
+..META_DATE
+2021-01-14T15:01:50.000
+..META_RECEIVED_DATE
+2021-01-14T15:00:39.000
+..FILE:신한은행 퇴직연금 운용상품 안내 조혜윤 님 2020-11-02기준.msg
+..DEPTH:2
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_3.msg
+..FILESIZE:25088
+..SUMMARY_BEGIN
+Format : [Microsoft Outlook MSG file]
+..SUMMARY_END
+..RETURN_CODE:0
+신한은행
+<http://track.shinhan.com/main/servlet/LinkTraceEC.do?SEND_MODE=desonlya
+66692ea4a3596e6&CAMPAIGN_NO=desonlyf3abeeec6a881ca93cc9665b1f93b707&RESU
+LT_SEQ=desonly67b6eb75038a9de3ed8f9e9934c49bfc21719ea3a8a634a3&START_DAT
+E=desonly56136a0c53cccf95f249c85f12baf7fa&END_DATE=desonly8dadab7c5ee2f7
+f2f249c85f12baf7fa&LIST_SEQ=desonly6c5ca6380003dac5436820869e54c1b9&RECO
+RD_SEQ=desonlyf40b1eba950e3bcb&CUSTOMER_ID=desonly4fc7f4c73641c1aad92744
+36477032cd&LINK_SEQ=1&LINK_URL=http%3A%2F%2Fwww.shinhan.com&LINKTITLE=%3
+Cimg+src%3D%22http%3A%2F%2Fimg.shinhan.com%2Fnexhpe%2Femail%2Flogo_shinh
+an.gif%22+alt%3D%22%BD%C5%C7%D1%C0%BA%C7%E0%22+border%3D%220%22%3E>
+미래를 함께하는 따뜻한
+금융<http://img.shinhan.com/nexhpe/eMail/email_20141118_img02.gif> 
+<http://img.shinhan.com/nexhpe/eMail/pension_unyounsangpum.jpg> 
+신한은행<http://img.shinhan.com/nexhpe/email/logo_shinhan_bot.gif>
+본 메일은 발신 전용 메일로서 고객님께서 신한은행 메일 수신 동의를 하셨거나
+고객님의 기존거래 유지 등을 위해 안내드리는 메일입니다. 
+상담을 원하시는 경우 Web 고객센터 <https://main.shinhan.com/hpe/index.jsp> 로 문의하시기
+바랍니다.
+This mail is only for transmission purpose. It was sent because you had
+agreed to receive e-mail from Shinhan Bank or to deliver information to
+maintain your existing transactions. If you need an assistance, Please
+call web customer center. <https://main.shinhan.com/hpe/index.jsp> 
+________________________________
+(주)신한은행(admin@shinhan.com) 04513 서울 중구 세종대로9길 20(태평로2가,대경빌딩)
+통신판매업 신고번호 : 중구 00345호
+COPYRIGHT (C)2012 BY SHINHAN BANK. ALL RIGHTS RESERVED. 
+<http://track.shinhan.com/main/servlet/ReceiveConfirmEC.do?SEND_MODE=des
+onlya66692ea4a3596e6&CAMPAIGN_NO=desonlyf3abeeec6a881ca93cc9665b1f93b707
+&RESULT_SEQ=desonly67b6eb75038a9de3ed8f9e9934c49bfc21719ea3a8a634a3&STAR
+T_DATE=desonly56136a0c53cccf95f249c85f12baf7fa&END_DATE=desonly8dadab7c5
+ee2f7f2f249c85f12baf7fa&LIST_SEQ=desonly6c5ca6380003dac5436820869e54c1b9
+&RECORD_SEQ=desonlyf40b1eba950e3bcb&CUSTOMER_ID=desonly4fc7f4c73641c1aad
+9274436477032cd> 
+..META_SUBJECT
+[신한은행,퇴직연금 운용상품 안내] 조혜윤 님 2020-11-02기준
+..META_FROM
+신한은행 admin@shinhan.com
+..META_TO
+조혜윤 님 hyey0218@daum.net
+..META_RECEIVED_DATE
+2020-11-02T14:57:31.000
+..META_DATE
+2020-11-02T14:57:36.000
+..FILE_END
+..FILE:24.eml
+..DEPTH:2
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_4.eml
+..FILESIZE:5135986
+..SUMMARY_BEGIN
+Format : [MIME Encapsulation of Aggregate]
+..SUMMARY_END
+..RETURN_CODE:0
+﻿
+..FILE:attached_file_noname.dat
+..DEPTH:3
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_5
+..FILESIZE:24
+..SUMMARY_BEGIN
+Format : [Korean Encoding Text (euc-kr, cp949)]
+Title : [나의 iPhone에서 보냄]
+..SUMMARY_END
+..RETURN_CODE:0
+나의 iPhone에서 보냄
+..FILE_END
+..FILE:attached_file_noname.dat
+..DEPTH:3
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_6
+..FILESIZE:1965416
+..RETURN_CODE:ERROR_SN3FLT_FILTER_M_NO_FILTER_ASSOCIATED
+..FILE_END
+..FILE:attached_file_noname.dat
+..DEPTH:3
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_7
+..FILESIZE:6
+..SUMMARY_BEGIN
+Format : [ASCII Text]
+..SUMMARY_END
+..RETURN_CODE:0
+..FILE_END
+..FILE:attached_file_noname.dat
+..DEPTH:3
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_8
+..FILESIZE:1835507
+..RETURN_CODE:ERROR_SN3FLT_FILTER_M_NO_FILTER_ASSOCIATED
+..FILE_END
+..META_FROM
+조혜윤<hyey0218@gmail.com>
+..META_TO
+hyey0218@daum.net
+..META_SUBJECT
+경찰청 connector script
+..META_DATE
+Mon,07Dec202008:35:37+0000
+..FILE_END
+..FILE_END
+..FILE:라이선스 키.txt
+..DEPTH:1
+..FILE_SAVED:94136b8c0e729cbb7458fbb0fdab2d29_9.txt
+..FILESIZE:29
+..SUMMARY_BEGIN
+Format : [ASCII Text]
+Title : [MMKP3-967VT-3GQDC-RKHVR-7QRCF]
+..SUMMARY_END
+..RETURN_CODE:0
+MMKP3-967VT-3GQDC-RKHVR-7QRCF
+..FILE_END
+
+elapsed:[854] ms
