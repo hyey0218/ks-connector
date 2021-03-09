@@ -1,12 +1,27 @@
 package com.konantech.forensic.common;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommonUtils {
+	private static final Logger log = LoggerFactory.getLogger(CommonUtils.class);
 
 	public static Map<String, String> getFileMetaSummaryMapFromString(String textExtracted) {
 		Map<String, String> resultMap = new HashMap<String, String>();
@@ -55,9 +70,10 @@ public class CommonUtils {
 			return fieldValue;
 		}
 	}
-	
+
 	/**
 	 * engine map[no-byte] byte sort
+	 * 
 	 * @param map
 	 * @param parseValue
 	 * @return
@@ -69,5 +85,105 @@ public class CommonUtils {
 		map.put(tmp, list1.get(0).getValue() + parseValue);
 		return tmp;
 	}
-	
+
+	public static String getDigestOfFile(Path path) throws IOException {
+		String digestStr = "";
+		if (Files.exists(path)) {
+			InputStream is = null;
+			try {
+				is = Files.newInputStream(path);
+				digestStr = DigestUtils.md5Hex(is); // "MD5"
+			} catch (Exception e) {
+				log.error("getDigestOfFile error, " + path.toString(), e);
+			} finally {
+				is.close();
+			}
+		}
+
+		return digestStr;
+	}
+
+	public static String emlDateFormat(String datefm) {
+
+		SimpleDateFormat formatter_one = new SimpleDateFormat("EEE,ddMMMyyyyhh:mm:ss", Locale.ENGLISH);
+		SimpleDateFormat formatter_twe = new SimpleDateFormat("yyyy-MM-dd");
+
+		String outString = "";
+
+		if (datefm.indexOf("Mon,") > -1 || datefm.indexOf("Tue,") > -1 || datefm.indexOf("Wed,") > -1
+				|| datefm.indexOf("Thu,") > -1 || datefm.indexOf("Fri,") > -1 || datefm.indexOf("Sat,") > -1
+				|| datefm.indexOf("Sun") > -1) {
+
+			formatter_one = new SimpleDateFormat("EEE,ddMMMyyyyhh:mm:ss", Locale.ENGLISH);
+			formatter_twe = new SimpleDateFormat("yyyyMMdd");
+			String inString = datefm;
+			ParsePosition pos = new ParsePosition(0);
+
+			Date frmTime = formatter_one.parse(inString, pos);
+			outString = formatter_twe.format(frmTime);
+			// System.out.println( " :outString : " + outString );
+		} else if (datefm.indexOf("Jan") > -1 || datefm.indexOf("Feb") > -1 || datefm.indexOf("Mar") > -1
+				|| datefm.indexOf("Apr") > -1 || datefm.indexOf("May") > -1 || datefm.indexOf("June") > -1
+				|| datefm.indexOf("Jul") > -1 || datefm.indexOf("Aug") > -1 || datefm.indexOf("Sept") > -1
+				|| datefm.indexOf("Oct") > -1 || datefm.indexOf("Nov") > -1 || datefm.indexOf("Dec") > -1) {
+
+			formatter_one = new SimpleDateFormat("ddMMMyyyyhh:mm:ss", Locale.ENGLISH);
+			formatter_twe = new SimpleDateFormat("yyyyMMdd");
+			String inString = datefm;
+			ParsePosition pos = new ParsePosition(0);
+
+			Date frmTime = formatter_one.parse(inString, pos);
+			outString = formatter_twe.format(frmTime);
+			// System.out.println( " :outString : " + outString );
+		} else {
+			formatter_one = new SimpleDateFormat("yyyy-MM-dd");
+			formatter_twe = new SimpleDateFormat("yyyyMMdd");
+			String inString = datefm;
+			ParsePosition pos = new ParsePosition(0);
+
+			Date frmTime = formatter_one.parse(inString, pos);
+			outString = formatter_twe.format(frmTime);
+			// System.out.println( " :outString : " + outString );
+		}
+
+		return outString;
+	}
+
+	/* used for K-project */
+	public static String removeTags(String htmlString) {
+		if (htmlString == null || htmlString.length() == 0) {
+			return htmlString;
+		}
+		String strUnEscapeHTML = htmlString.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+		strUnEscapeHTML = strUnEscapeHTML.replaceAll("<", "&lt;");
+		strUnEscapeHTML = strUnEscapeHTML.replaceAll(">", "&gt;");
+
+		return strUnEscapeHTML;
+	}
+
+	//이메일 주소만 추출하기 위한 용도
+	public static String getOnlyEmailAddress(String addressesIncluingName){
+		String returnStr = null;
+		String regEx = "(?<=&lt;)(.*?)(?=&gt;)";
+		Pattern pat = Pattern.compile(regEx);
+
+		if (addressesIncluingName != null && !"".equals(addressesIncluingName)){
+			String[] addressArr = addressesIncluingName.split(",");
+			StringBuilder emlAddress = new StringBuilder();
+			for (String addr : addressArr) {			//쉼표로 구분된 이메일 각각에 대해 
+				if (addr.contains("&lt;") && addr.contains("&gt;")){	// case1 : name <account.host.co.kr>
+					Matcher match = pat.matcher(addr);
+					while (match.find()) {		//주소 리스트 만들기
+						if (emlAddress != null && emlAddress.length() > 0) emlAddress.append("\n");
+						emlAddress.append(match.group().trim());
+					}
+				} else {		// case2 : account.host.co.kr
+					if (emlAddress != null && emlAddress.length() > 0) emlAddress.append("\n");
+					emlAddress.append(addr.trim());
+				}
+			} 
+			returnStr = emlAddress.toString();
+		}
+		return returnStr;
+	}
 }

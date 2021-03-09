@@ -126,7 +126,7 @@ public class DataRead {
 
 	public static void main(String[] args) {
 		DataRead dr = new DataRead();
-		dr.readFGFToMap("C:\\Users\\hyeyoon\\git\\ks-connector\\ks-connector-util\\resources\\mmm");
+		dr.readFGFToMap("C:\\Users\\hyeyoon\\git\\ks-connector\\ks-connector-util\\resources\\out_10.txt");
 	}
 
 	public void readFGFToMap(String filepath) {
@@ -160,14 +160,23 @@ public class DataRead {
 				System.out.println(c.getTagMap().get("..META_SUBJECT").getContent().toString());
 			System.out.println(c.getTagMap().get("..DEPTH:").getContent().toString());
 			System.out.println(c.getPk() + " " + c.getParent());
+			
+			Map<String, String> summaryMap = CommonUtils
+					.getFileMetaSummaryMapFromString(c.getTagMap().get("..SUMMARY_BEGIN").getContent().toString());
+			summaryMap.entrySet().stream().forEach(c2 ->{
+				System.out.println(c2);
+			});
 			System.out.println("-----------------------------------------------------");
 		});
 		
 		
 		// 후처리
 		// 1. SUMMARY_BEGIN - SUMMARY_END
-		Map<String, String> summaryMap = CommonUtils
-				.getFileMetaSummaryMapFromString(TAG_MAP.get("..SUMMARY_BEGIN").getContent().toString());
+//		Map<String, String> summaryMap = CommonUtils
+//				.getFileMetaSummaryMapFromString(TAG_MAP.get("..SUMMARY_BEGIN").getContent().toString());
+//		summaryMap.entrySet().stream().forEach(c ->{
+//			System.out.println(c);
+//		});
 
 	}
 	static Stack<String> parents = new Stack<String>();
@@ -182,7 +191,7 @@ public class DataRead {
 					continue;
 				}
 				/////////////////////if (tagInfo.isRecordStarter()) START /////////////////////
-				if (tagInfo.isRecordStarter()) { // file의 시작을 알리는 태그일 떄 (FILE, EMAIL)
+				if (tagInfo.isRecordStart()) { // file의 시작을 알리는 태그일 떄 (FILE, EMAIL)
 					Record record = new Record();
 					HashMap<String, TagInfo> recordTagMap = createTagMap();
 					tagInfo = recordTagMap.get(key);
@@ -208,7 +217,8 @@ public class DataRead {
 				else {// 그 외 태그
 					Record current = records.get(records.size() - 1);
 					tagInfo = current.getTagMap().get(key);
-					if (key.lastIndexOf(":") != -1) {
+//					if (key.lastIndexOf(":") != -1) {
+					if(tagInfo.isValueInLine()) {
 						tagInfo.getContent().append(brLine.replace(key, ""));
 					}
 				}
