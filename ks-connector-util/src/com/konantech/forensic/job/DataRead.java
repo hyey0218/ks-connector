@@ -49,7 +49,6 @@ import lombok.AllArgsConstructor;
 
 public class DataRead {
 	private static final Logger log = LoggerFactory.getLogger(DataRead.class);
-	private static Properties konanProps = PropertyConfig.getProperties();
 
 	private static String[] dataKeys = { "..EMAIL", "..META_SUBJECT", "..META_DATE", "..META_FROM", "..META_TO",
 			"..META_CC", "..META_RECEIVED_DATE", "..FILE:", "..DEPTH:", "..FILE_SAVED:", "..FILESIZE:",
@@ -75,7 +74,7 @@ public class DataRead {
 		tagMap.put("..FILESIZE:", new TagInfo(Const.TYPE_INTERNAL_FILE, "FILESIZE", true, false));
 		tagMap.put("..SUMMARY_BEGIN", new TagInfo(Const.TYPE_INTERNAL_FILE, "FILEMETA_SUMMARY", false, false));
 		tagMap.put("..SUMMARY_END", new TagInfo(Const.TYPE_INTERNAL_FILE, "DUMMY_SUMMARY_END", false, false));
-		tagMap.put("..RETURN_CODE:", new TagInfo(Const.TYPE_INTERNAL_FILE, "FILTER_META_ERROR_MSG", true, false));
+		tagMap.put("..RETURN_CODE:", new TagInfo(Const.TYPE_INTERNAL_FILE, "RETURN_CODE", true, false));
 //		tagMap.put("..FILE_END", new TagInfo(Const.TYPE_INTERNAL_FILE, "DUMMY_FILE_END", false, false));
 		tagMap.put("..FILE_END", null);
 		tagMap.put("..CALENDAR", new TagInfo(Const.TYPE_INTERNAL_BASE_RECORD, "DUMMY_CALENDAR", false, true));
@@ -114,29 +113,14 @@ public class DataRead {
 			return null;
 	}
 
-	private static String filterPath = konanProps.getProperty("filter.path");
-
-	public String makeFGFFiles(String resultFilePath) {
-		String tmp = resultFilePath.substring(resultFilePath.lastIndexOf("/") + 1, resultFilePath.length());
-		String filePath = filterPath + File.separator + tmp;
-
-		return "";
-
-	}
-
-	public static void main(String[] args) {
-		DataRead dr = new DataRead();
-		dr.readFGFToMap("C:\\Users\\hyeyoon\\git\\ks-connector\\ks-connector-util\\resources\\out_10.txt");
-	}
-
 	public void readFGFToMap(String filepath) {
 		BufferedReader br = null;
 		List<Record> records = new ArrayList<Record>();
 		try {
 			br = new BufferedReader(new FileReader(new File(filepath)));
 			String root = UUID.randomUUID().toString();
-			
-			makeTagInfo(br, root,  records, null);
+
+			makeTagInfo(br, root, records, null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -150,47 +134,53 @@ public class DataRead {
 				}
 			}
 		}
-		System.out.println(records.size());
-		records.stream().forEach(c -> {
-			System.out.println("-----------------------------------------------------");
-			String file = c.getTagMap().get("..FILE:").getContent().toString();
-			if (file.length() > 0)
-				System.out.println(file);
-			else
-				System.out.println(c.getTagMap().get("..META_SUBJECT").getContent().toString());
-			System.out.println(c.getTagMap().get("..DEPTH:").getContent().toString());
-			System.out.println(c.getPk() + " " + c.getParent());
-			
-			Map<String, String> summaryMap = CommonUtils
-					.getFileMetaSummaryMapFromString(c.getTagMap().get("..SUMMARY_BEGIN").getContent().toString());
-			summaryMap.entrySet().stream().forEach(c2 ->{
-				System.out.println(c2);
-			});
-			System.out.println("-----------------------------------------------------");
-		});
-		
-		
+
 		// 후처리
 		// 1. SUMMARY_BEGIN - SUMMARY_END
-//		Map<String, String> summaryMap = CommonUtils
-//				.getFileMetaSummaryMapFromString(TAG_MAP.get("..SUMMARY_BEGIN").getContent().toString());
-//		summaryMap.entrySet().stream().forEach(c ->{
-//			System.out.println(c);
-//		});
+
+		System.out.println(records.size());
+		records.stream().forEach(c -> {
+//			System.out.println("-----------------------------------------------------");
+//			String file = c.getTagMap().get("..FILE:").getContent().toString();
+//			if (file.length() > 0)
+//				System.out.println(file);
+//			else
+//				System.out.println(c.getTagMap().get("..META_SUBJECT").getContent().toString());
+//			System.out.println(c.getTagMap().get("..DEPTH:").getContent().toString());
+//			System.out.println(c.getPk() + " " + c.getParent());
+
+			Map<String, String> summaryMap = CommonUtils
+					.getFileMetaSummaryMapFromString(c.getTagMap().get("..SUMMARY_BEGIN").getContent().toString());
+			summaryMap.entrySet().stream().forEach(c2 -> {
+				System.out.println(c2);
+			});
+			c.setSummaryMap(summaryMap);
+//			System.out.println("-----------------------------------------------------");
+		});
+
+		try {
+			RecordWriter rw = new RecordWriter();
+//			rw.setSaveFgfPath("C:\\Users\\hyeyoon.cho\\git\\ks-connector-util\\ks-connector-util\\dmp\\");
+			rw.writeRecordToFGF(records);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
+
 	static Stack<String> parents = new Stack<String>();
+
 	public void makeTagInfo(BufferedReader br, String root, List<Record> records, TagInfo tagInfo) throws IOException {
 		String brLine = null;
 		while ((brLine = br.readLine()) != null) {
 			String key = null;
 			if ((key = isContainRecordTag(brLine)) != null) { // ..TAG 포함하는 line
 				tagInfo = TAG_MAP.get(key);
-				if( tagInfo == null ) {
+				if (tagInfo == null) {
 					parents.pop();
 					continue;
 				}
-				/////////////////////if (tagInfo.isRecordStarter()) START /////////////////////
+				///////////////////// if (tagInfo.isRecordStarter()) START /////////////////////
 				if (tagInfo.isRecordStart()) { // file의 시작을 알리는 태그일 떄 (FILE, EMAIL)
 					Record record = new Record();
 					HashMap<String, TagInfo> recordTagMap = createTagMap();
@@ -206,19 +196,20 @@ public class DataRead {
 							record.generateKeys(root, parents.peek());
 						}
 						parents.push(record.getPk());
-					}else if("..EMAIL".equals(key)) {
+					} else if ("..EMAIL".equals(key)) {
 						record.generateKeys(root, parents.peek());
 					}
 					recordTagMap.replace(key, tagInfo);
 					record.setTagMap(recordTagMap);
 					records.add(record);
-				} 
-				/////////////////////// if (tagInfo.isRecordStarter()) END /////////////////////////
+				}
+				/////////////////////// if (tagInfo.isRecordStarter()) END
+				/////////////////////// /////////////////////////
 				else {// 그 외 태그
 					Record current = records.get(records.size() - 1);
 					tagInfo = current.getTagMap().get(key);
 //					if (key.lastIndexOf(":") != -1) {
-					if(tagInfo.isValueInLine()) {
+					if (tagInfo.isValueInLine()) {
 						tagInfo.getContent().append(brLine.replace(key, ""));
 					}
 				}
