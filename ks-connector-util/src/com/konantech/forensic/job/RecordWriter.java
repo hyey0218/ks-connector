@@ -45,7 +45,7 @@ public class RecordWriter {
 	}
 	public boolean writeRecordToFGF(List<Record> recordList) throws Exception {
 		if(this.saveFgfPath == null) 
-			throw new Exception("check the fgfsavepath");
+			throw new Exception("check the fgfsavepath !!!");
 		boolean success = false;
 		Map<String, Integer> sizeMap = new HashMap<String, Integer>();
 		BufferedWriter bw = null;
@@ -168,6 +168,7 @@ public class RecordWriter {
 			if (returnCode.charAt(0)  == '0') { // 메타 정보 추출 성공
 				returnMap.put("FILTER_RESULT", "SUCCESS");
 				returnMap.put("RETURN_BODY" , returnCode.substring(1, returnCode.length()));
+				returnMap.put("RETURN_CODE", String.valueOf(returnCode.charAt(0))); // RETURN_CODE 본문내용 삭제
 
 				String drmErrorMsg = getErrorMsgIfDrmError(fieldValueMap.get("FILEMETA_FORMAT"));
 				if (drmErrorMsg != null && drmErrorMsg.length() > 0) { // 본문 필터링 결과 에러 메시지가 있는 경우

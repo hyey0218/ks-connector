@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,29 +163,132 @@ public class CommonUtils {
 		return strUnEscapeHTML;
 	}
 
-	//이메일 주소만 추출하기 위한 용도
-	public static String getOnlyEmailAddress(String addressesIncluingName){
+	// 이메일 주소만 추출하기 위한 용도
+	public static String getOnlyEmailAddress(String addressesIncluingName) {
 		String returnStr = null;
 		String regEx = "(?<=&lt;)(.*?)(?=&gt;)";
 		Pattern pat = Pattern.compile(regEx);
 
-		if (addressesIncluingName != null && !"".equals(addressesIncluingName)){
+		if (addressesIncluingName != null && !"".equals(addressesIncluingName)) {
 			String[] addressArr = addressesIncluingName.split(",");
 			StringBuilder emlAddress = new StringBuilder();
-			for (String addr : addressArr) {			//쉼표로 구분된 이메일 각각에 대해 
-				if (addr.contains("&lt;") && addr.contains("&gt;")){	// case1 : name <account.host.co.kr>
+			for (String addr : addressArr) { // 쉼표로 구분된 이메일 각각에 대해
+				if (addr.contains("&lt;") && addr.contains("&gt;")) { // case1 : name <account.host.co.kr>
 					Matcher match = pat.matcher(addr);
-					while (match.find()) {		//주소 리스트 만들기
-						if (emlAddress != null && emlAddress.length() > 0) emlAddress.append("\n");
+					while (match.find()) { // 주소 리스트 만들기
+						if (emlAddress != null && emlAddress.length() > 0)
+							emlAddress.append("\n");
 						emlAddress.append(match.group().trim());
 					}
-				} else {		// case2 : account.host.co.kr
-					if (emlAddress != null && emlAddress.length() > 0) emlAddress.append("\n");
+				} else { // case2 : account.host.co.kr
+					if (emlAddress != null && emlAddress.length() > 0)
+						emlAddress.append("\n");
 					emlAddress.append(addr.trim());
 				}
-			} 
+			}
 			returnStr = emlAddress.toString();
 		}
 		return returnStr;
+	}
+
+	public static Map<String, ArrayList<String>> setTextFilterFormatInfo(List<Map> textFilterFormatInfoList) {
+		HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+		if (textFilterFormatInfoList != null && textFilterFormatInfoList.size() > 0) {
+
+			for (Map formatInfoMap : textFilterFormatInfoList) {
+				if (formatInfoMap != null && formatInfoMap.size() > 0) {
+					ArrayList<String> formatInfo = new ArrayList<String>();
+					formatInfo.add((String) formatInfoMap.get("FILE_FORMAT_GROUP"));
+					formatInfo.add((String) formatInfoMap.get("FILE_FORMAT_EXTENSION"));
+					// 이메일검색 포맷 그룹화 용도
+					if (formatInfoMap.get("FILE_FORMAT_GROUP_EMAIL") != null)
+						formatInfo.add((String) formatInfoMap.get("FILE_FORMAT_GROUP_EMAIL"));
+					// 화면 출력 포맷 그룹화 용도
+					if (formatInfoMap.get("FILE_FORMAT_GROUP_DISPLAY") != null)
+						formatInfo.add((String) formatInfoMap.get("FILE_FORMAT_GROUP_DISPLAY"));
+					// 파일명의 확장자 변조 검증 대상 여부 용도
+					if (formatInfoMap.get("DETECT_EXTENSION_FORGED") != null)
+						formatInfo.add((String) formatInfoMap.get("DETECT_EXTENSION_FORGED"));
+					// 다운로드 가능 여부 용도
+					if (formatInfoMap.get("DOWNLOADABLE") != null)
+						formatInfo.add((String) formatInfoMap.get("DOWNLOADABLE"));
+
+					map.put((String) formatInfoMap.get("FILEMETA_FORMAT"), formatInfo);
+				}
+			}
+
+			if (map != null)
+				log.info("setTextFilterFormatInfo completed, " + map.size() + " formats.");
+
+		}
+		return map;
+	}
+
+	// 메타정보로부터 식별된 포맷에 따른 그룹, 확장자 변조 여부 확인 - String 타입
+	public static Map<String, String> setFileFormatInfo(Map<String, ArrayList<String>> formatInfoMap, String filepath, String fileMetaFormat) {
+		Map<String, String> resultMap = new HashMap<String, String>();
+
+		String fileNameExtension = null;
+		String fileFormatExtension = null;
+
+		try {
+			if (filepath != null) {
+				fileNameExtension = FilenameUtils.getExtension(filepath).toLowerCase();
+				resultMap.put("FILENAME_EXTENSION", fileNameExtension);
+			}
+
+			if (fileMetaFormat != null && !"".equals(fileMetaFormat)) {
+				// 메타정보로부터 식별된 포맷에 따른 확장자 및 그룹 확인
+				ArrayList<String> formatInfo = formatInfoMap.get(fileMetaFormat);
+				if (formatInfo != null && formatInfo.size() >= 2) {
+					resultMap.put("FILE_FORMAT_GROUP", formatInfo.get(0));
+					fileFormatExtension = formatInfo.get(1).toLowerCase();
+					resultMap.put("FILE_FORMAT_EXTENSION", fileFormatExtension);
+
+					if (formatInfo.size() >= 3) {
+						resultMap.put("FILE_FORMAT_GROUP_EMAIL", formatInfo.get(2));
+					}
+					if (formatInfo.size() >= 4) {
+						resultMap.put("FILE_FORMAT_GROUP_DISPLAY", formatInfo.get(3));
+					}
+					if (formatInfo.size() >= 5) {
+						resultMap.put("DETECT_EXTENSION_FORGED", formatInfo.get(4));
+					}
+					if (formatInfo.size() >= 6) {
+						resultMap.put("DOWNLOADABLE", formatInfo.get(5));
+					}
+				}
+			}
+
+			if (resultMap.get("FILE_FORMAT_GROUP") == null || "".equals(resultMap.get("FILE_FORMAT_GROUP"))) {
+				// FILE_FORMAT_GROUP 지정되지 않은 파일에 값 지정
+				resultMap.put("FILE_FORMAT_GROUP", Const.FILE_FORMAT_GROUP_ETC);
+			}
+			if (resultMap.get("FILE_FORMAT_GROUP_EMAIL") == null
+					|| "".equals(resultMap.get("FILE_FORMAT_GROUP_EMAIL"))) {
+				// FILE_FORMAT_GROUP_EMAIL 지정되지 않은 파일에 값 지정
+				resultMap.put("FILE_FORMAT_GROUP_EMAIL", Const.FILE_FORMAT_GROUP_ETC);
+			}
+			if (resultMap.get("FILE_FORMAT_GROUP_DISPLAY") == null
+					|| "".equals(resultMap.get("FILE_FORMAT_GROUP_DISPLAY"))) {
+				// FILE_FORMAT_GROUP_DISPLAY 지정되지 않은 파일에 값 지정
+				resultMap.put("FILE_FORMAT_GROUP_DISPLAY", Const.FILE_FORMAT_GROUP_ETC);
+			}
+
+			if (fileNameExtension != null && fileFormatExtension != null) {
+				// 확장자 변조 검증 대상인지 & 메타정보로부터 식별된 포맷 확장자 변조 여부 확인
+				if (!"Y".equalsIgnoreCase(resultMap.get("DETECT_EXTENSION_FORGED"))
+						|| Arrays.asList(fileFormatExtension.split("\\s*,\\s*")).contains(fileNameExtension)) {
+					resultMap.put("FILENAME_EXTENSION_FORGED", "N");
+				} else {
+					resultMap.put("FILENAME_EXTENSION_FORGED", "Y");
+				}
+			}
+
+		} catch (Exception e) {
+			log.error("setFileFormatInfo error.", e);
+		}
+
+		return resultMap;
 	}
 }

@@ -20,10 +20,23 @@ import com.konantech.forensic.common.Const;
 //데이터베이스 데이터 접근용 - 공통 쿼리만 포함함
 public class DatabaseDao {
 	public static final Logger log = LoggerFactory.getLogger(DatabaseDao.class);
+	private static DataSource ds = null;
+	public DatabaseDao() {
+		try {
+			ds = JdbcUtils.getDataSource("MySQL");
+		}catch (Exception e) {
+			log.error("JdbcUtils.getDataSource error");
+			ds = null;
+		}
+	}
+	
+	public static boolean isConnectedDataSource() {
+		return ds != null;
+	}
 	
 	public static Map selectThisTaskInfo(String engineId, String taskStatus) {
 		// _self references the data source used by this job. 
-		DataSource ds = JdbcUtils.getDataSource("MySQL");
+//		DataSource ds = JdbcUtils.getDataSource("MySQL");
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -61,7 +74,7 @@ public class DatabaseDao {
 	
 	public static List<Map> selectThisScenarioInfo(String scenario) {
 		// _self references the data source used by this job. 
-		DataSource ds = JdbcUtils.getDataSource("MySQL");
+//		DataSource ds = JdbcUtils.getDataSource("MySQL");
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -93,7 +106,7 @@ public class DatabaseDao {
 
 	public static int updateTaskStatus(String taskId, String currentStatus, String targetStatus) {
 		// _self references the data source used by this job. 
-		DataSource ds = JdbcUtils.getDataSource("MySQL");
+//		DataSource ds = JdbcUtils.getDataSource("MySQL");
 		PreparedStatement pstmt = null;
 		Connection conn = null;
 		int rs = 0;
@@ -127,7 +140,7 @@ public class DatabaseDao {
 	 */
 	public static Map selectAssignedResourcesInfo(String engineResourceId, String volumeStatus) {
 		// _self references the data source used by this job. 
-		DataSource ds = JdbcUtils.getDataSource("MySQL");
+//		DataSource ds = JdbcUtils.getDataSource("MySQL");
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -171,7 +184,7 @@ public class DatabaseDao {
 
 	public static Map selectThisResourceInfo(String resourceId, String resourceStatus) {
 		// _self references the data source used by this job. 
-		DataSource ds = JdbcUtils.getDataSource("MySQL");
+//		DataSource ds = JdbcUtils.getDataSource("MySQL");
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -208,7 +221,7 @@ public class DatabaseDao {
 	 */
 	public static List<Map> selectTextFilterFormatInfo() {
 		// _self references the data source used by this job. 
-		DataSource ds = JdbcUtils.getDataSource("MySQL");
+//		DataSource ds = JdbcUtils.getDataSource("MySQL");
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;

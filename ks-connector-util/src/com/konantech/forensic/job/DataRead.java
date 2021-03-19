@@ -38,6 +38,7 @@ import com.konantech.connector.util.Config;
 import com.konantech.forensic.common.CommonUtils;
 import com.konantech.forensic.common.Const;
 import com.konantech.forensic.common.PropertyConfig;
+import com.konantech.forensic.dao.DatabaseDao;
 import com.konantech.forensic.vo.Record;
 import com.konantech.forensic.vo.TagInfo;
 import com.konantech.kmp.JSONConst;
@@ -50,11 +51,16 @@ import lombok.AllArgsConstructor;
 public class DataRead {
 	private static final Logger log = LoggerFactory.getLogger(DataRead.class);
 
-	private static String[] dataKeys = { "..EMAIL", "..META_SUBJECT", "..META_DATE", "..META_FROM", "..META_TO",
-			"..META_CC", "..META_RECEIVED_DATE", "..FILE:", "..DEPTH:", "..FILE_SAVED:", "..FILESIZE:",
-			"..SUMMARY_BEGIN", "..SUMMARY_END", "..RETURN_CODE:", "..FILE_END:", "..CALENDAR", "..META_STARTTIME",
-			"..META_ENDTIME", "..CONTACT", "..META_NAME", "..META_COMPANY", "..META_DEPARTMENT", "..META_JOB_TITLE",
-			"..META_TEL", "..META_EMAIL" };
+	private String runningFileName = "";
+
+	/**
+	 * 파일 파싱 실행 시 요청 파일 입력함 - 로깅 등 활용
+	 * 
+	 * @param fileName
+	 */
+	public DataRead(String fileName) {
+		this.runningFileName = fileName;
+	}
 
 	static HashMap<String, TagInfo> TAG_MAP = createTagMap();
 
@@ -93,7 +99,19 @@ public class DataRead {
 		return tagMap;
 	}
 
-	private static Pattern pattern = Pattern.compile("^[.]{2}[_A-Z]+[:|$]?", Pattern.MULTILINE);
+	private static Pattern PATTERN = Pattern.compile("^[.]{2}[_A-Z]+[:|$]?", Pattern.MULTILINE);
+
+	/**
+	 * KONAN_TEXTFILTER_FORMAT
+	 */
+	private static Map<String, ArrayList<String>> FORMAT_INFO = getFormatInfo();
+
+	public static Map<String, ArrayList<String>> getFormatInfo() {
+		if(DatabaseDao.isConnectedDataSource())
+			return CommonUtils.setTextFilterFormatInfo(DatabaseDao.selectTextFilterFormatInfo());
+		else
+			return new HashMap<String, ArrayList<String>>();
+	}
 
 	/**
 	 * 문자열에 태그가 포함하는지
@@ -102,7 +120,7 @@ public class DataRead {
 	 * @return map key값
 	 */
 	public String isContainRecordTag(String line) {
-		Matcher matcher = pattern.matcher(line);
+		Matcher matcher = PATTERN.matcher(line);
 		if (matcher.find()) {
 			String matchStr = matcher.group();
 			if (TAG_MAP.containsKey(matchStr))
@@ -119,11 +137,14 @@ public class DataRead {
 		try {
 			br = new BufferedReader(new FileReader(new File(filepath)));
 			String root = UUID.randomUUID().toString();
+			log.info("root :: " + root + " ==> " + filepath);
 
 			makeTagInfo(br, root, records, null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (br != null) {
@@ -136,28 +157,23 @@ public class DataRead {
 		}
 
 		// 후처리
-		// 1. SUMMARY_BEGIN - SUMMARY_END
-
 		System.out.println(records.size());
 		records.stream().forEach(c -> {
-//			System.out.println("-----------------------------------------------------");
-//			String file = c.getTagMap().get("..FILE:").getContent().toString();
-//			if (file.length() > 0)
-//				System.out.println(file);
-//			else
-//				System.out.println(c.getTagMap().get("..META_SUBJECT").getContent().toString());
-//			System.out.println(c.getTagMap().get("..DEPTH:").getContent().toString());
-//			System.out.println(c.getPk() + " " + c.getParent());
-
-			Map<String, String> summaryMap = CommonUtils
-					.getFileMetaSummaryMapFromString(c.getTagMap().get("..SUMMARY_BEGIN").getContent().toString());
-			summaryMap.entrySet().stream().forEach(c2 -> {
-				System.out.println(c2);
-			});
+			// 1. SUMMARY_BEGIN - SUMMARY_END
+			String summaryInformation = c.getTagMap().get("..SUMMARY_BEGIN").getContent().toString();
+			Map<String, String> summaryMap = CommonUtils.getFileMetaSummaryMapFromString(summaryInformation);
 			c.setSummaryMap(summaryMap);
-//			System.out.println("-----------------------------------------------------");
+			// 2. FILE EXTENSION
+			if(summaryMap.get("FILEMETA_FORMAT") != null) {
+				summaryMap.putAll(CommonUtils.setFileFormatInfo(FORMAT_INFO,
+						c.getTagMap().get("..FILE:").getContent().toString(), summaryMap.get("FILEMETA_FORMAT")));
+			}
+
 		});
 
+		
+		
+		
 		try {
 			RecordWriter rw = new RecordWriter();
 //			rw.setSaveFgfPath("C:\\Users\\hyeyoon.cho\\git\\ks-connector-util\\ks-connector-util\\dmp\\");
@@ -170,11 +186,11 @@ public class DataRead {
 
 	static Stack<String> parents = new Stack<String>();
 
-	public void makeTagInfo(BufferedReader br, String root, List<Record> records, TagInfo tagInfo) throws IOException {
+	public void makeTagInfo(BufferedReader br, String root, List<Record> records, TagInfo tagInfo) throws Exception {
 		String brLine = null;
 		while ((brLine = br.readLine()) != null) {
 			String key = null;
-			if ((key = isContainRecordTag(brLine)) != null) { // ..TAG 포함하는 line
+			if ((key = isContainRecordTag(brLine)) != null) { // ..TAG 내용이 있는 line
 				tagInfo = TAG_MAP.get(key);
 				if (tagInfo == null) {
 					parents.pop();
@@ -218,8 +234,17 @@ public class DataRead {
 				if (tagInfo.getContent().length() > 0)
 					tagInfo.getContent().append("\n");
 				tagInfo.getContent().append(brLine);
+			} else {
+				if(records.size() > 0 ) {
+					Record record = records.get(records.size() - 1);
+					log.error("record PK :: " + record.getPk());
+				}
+				if(tagInfo != null)
+					log.error("field name :: " + tagInfo.getFieldName());
+				throw new Exception("The filtered Tag is weird... \n root file :: " + this.runningFileName);
 			}
 		}
 
 	}
+
 }
