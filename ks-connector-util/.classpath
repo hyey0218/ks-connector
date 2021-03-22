@@ -16,9 +16,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/connector-console-2.1.1.jar" sourcepath="lib/connector-console-2.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/kmp-1.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/konan-commons-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/konan-connector-2.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/connector-console-2.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/kmp-1.1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/konan-commons-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/konan-connector-2.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hyeyoon.cho/git/ks-connector-util/ks-connector-util/lib/slf4j-log4j12-1.7.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

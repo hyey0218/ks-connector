@@ -2,65 +2,31 @@ package com.konantech.forensic.job;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.konantech.connector.core.TextFilter;
-import com.konantech.connector.util.Config;
 import com.konantech.forensic.common.CommonUtils;
 import com.konantech.forensic.common.Const;
-import com.konantech.forensic.common.PropertyConfig;
 import com.konantech.forensic.dao.DatabaseDao;
 import com.konantech.forensic.vo.Record;
 import com.konantech.forensic.vo.TagInfo;
-import com.konantech.kmp.JSONConst;
-import com.konantech.kmp.JValue;
-import com.konantech.kmp.KJSON;
-import com.konantech.kmp.KMP;
-
-import lombok.AllArgsConstructor;
 
 public class DataRead {
 	private static final Logger log = LoggerFactory.getLogger(DataRead.class);
 
 	private String runningFileName = "";
 
-	/**
-	 * 파일 파싱 실행 시 요청 파일 입력함 - 로깅 등 활용
-	 * 
-	 * @param fileName
-	 */
-	public DataRead(String fileName) {
-		this.runningFileName = fileName;
-	}
 
 	static HashMap<String, TagInfo> TAG_MAP = createTagMap();
 
@@ -132,6 +98,7 @@ public class DataRead {
 	}
 
 	public void readFGFToMap(String filepath) {
+		this.runningFileName = filepath;
 		BufferedReader br = null;
 		List<Record> records = new ArrayList<Record>();
 		try {
@@ -186,7 +153,7 @@ public class DataRead {
 
 	static Stack<String> parents = new Stack<String>();
 
-	public void makeTagInfo(BufferedReader br, String root, List<Record> records, TagInfo tagInfo) throws Exception {
+	public void makeTagInfo(BufferedReader br, String root, List<Record> records, TagInfo tagInfo) throws IOException {
 		String brLine = null;
 		while ((brLine = br.readLine()) != null) {
 			String key = null;
@@ -230,21 +197,27 @@ public class DataRead {
 					}
 				}
 				makeTagInfo(br, root, records, tagInfo); // Recursive
-			} else if (tagInfo != null) { // 태그가 포함되지 않는 내용 line
+			} else if (tagInfo != null) { // 태그 시작된 이후(tagInfo 정보 O) + 태그가 포함되지 않는 내용 line
 				if (tagInfo.getContent().length() > 0)
 					tagInfo.getContent().append("\n");
 				tagInfo.getContent().append(brLine);
-			} else {
-				if(records.size() > 0 ) {
-					Record record = records.get(records.size() - 1);
-					log.error("record PK :: " + record.getPk());
+			} 
+			else {
+				if( !brLine.isEmpty() ) {
+					log.error("The filtered Tag is weird... \n root file :: " + this.runningFileName);
+					log.error("line :: " + brLine);
+					if(records.size() > 0 ) {
+						Record record = records.get(records.size() - 1);
+						log.error("record PK :: " + record.getPk());
+					}
 				}
-				if(tagInfo != null)
-					log.error("field name :: " + tagInfo.getFieldName());
-				throw new Exception("The filtered Tag is weird... \n root file :: " + this.runningFileName);
+					
 			}
 		}
-
+	}
+	public static void main(String[] args) {
+		DataRead dr = new DataRead();
+		dr.readFGFToMap("C:\\Users\\hyeyoon.cho\\git\\ks-connector-util\\ks-connector-util\\resources\\mmm");
 	}
 
 }

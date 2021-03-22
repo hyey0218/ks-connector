@@ -14,10 +14,11 @@ public class PropertyConfig {
 		Properties props = new Properties();
 		FileInputStream istream = null;
 		String fileFPath = System.getProperty("konan.configuration");
+		String log4j = System.getProperty("log4j.configuration");
 		try {
 		if (fileFPath == null)
 			throw new Exception("run konan.configuration is null");
-			System.out.println("konan.configuration : " + fileFPath);
+//			System.out.println("konan.configuration : " + fileFPath);
 			istream = new FileInputStream(fileFPath);
 			props.load(istream);
 			istream.close();

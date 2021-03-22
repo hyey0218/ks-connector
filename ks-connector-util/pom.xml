@@ -5,6 +5,7 @@
 	<groupId>ks-connector-util</groupId>
 	<artifactId>ks-connector-util</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -18,27 +19,40 @@
 			<!-- <scope>provided</scope> -->
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.30</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.30</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.4</version>
+		</dependency>
+		
+		
+		<!-- 커넥터에 있는 라이브러리 :: 공용으로 쓰이므로 빌드시 제외됨  -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.2.15</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/log4j-1.2.15.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.apache</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/slf4j-api-1.7.5.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/commons-lang3-3.1.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/commons-io-2.4.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>kmp</groupId>
@@ -61,7 +75,6 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/konan-commons-1.4.jar</systemPath>
 		</dependency>
-
 		<dependency>
 			<groupId>konan-connector</groupId>
 			<artifactId>konan-connector</artifactId>
@@ -69,17 +82,12 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/konan-connector-2.1.1.jar</systemPath>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.8.1</version>
-		</dependency>
-
-
 	</dependencies>
 
-	<build>
 
+
+
+	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
