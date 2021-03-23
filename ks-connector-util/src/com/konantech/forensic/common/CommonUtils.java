@@ -25,6 +25,24 @@ import org.slf4j.LoggerFactory;
 public class CommonUtils {
 	private static final Logger log = LoggerFactory.getLogger(CommonUtils.class);
 
+	
+
+	/**
+	 * engine map[no-byte] byte sort
+	 * connector multi thread 에서 동시에 사용 -> synchronized
+	 * @param map
+	 * @param parseValue
+	 * @return
+	 */
+	public static synchronized String mapValueCompare(Map<String, Long> map, int parseValue) {
+		List<Entry<String, Long>> list1 = new ArrayList<>(map.entrySet());
+		list1.sort(Entry.comparingByValue());
+		String tmp = list1.get(0).getKey();
+		map.put(tmp, list1.get(0).getValue() + parseValue);
+		return tmp;
+	}
+
+	
 	public static Map<String, String> getFileMetaSummaryMapFromString(String textExtracted) {
 		Map<String, String> resultMap = new HashMap<String, String>();
 
@@ -71,21 +89,6 @@ public class CommonUtils {
 		} else {
 			return fieldValue;
 		}
-	}
-
-	/**
-	 * engine map[no-byte] byte sort
-	 * 
-	 * @param map
-	 * @param parseValue
-	 * @return
-	 */
-	public static synchronized String mapValueCompare(Map<String, Long> map, int parseValue) {
-		List<Entry<String, Long>> list1 = new ArrayList<>(map.entrySet());
-		list1.sort(Entry.comparingByValue());
-		String tmp = list1.get(0).getKey();
-		map.put(tmp, list1.get(0).getValue() + parseValue);
-		return tmp;
 	}
 
 	public static String getDigestOfFile(Path path) throws IOException {

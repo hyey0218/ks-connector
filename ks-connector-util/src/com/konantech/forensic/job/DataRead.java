@@ -32,7 +32,7 @@ public class DataRead {
 
 	public static HashMap<String, TagInfo> createTagMap() {
 		HashMap<String, TagInfo> tagMap = new HashMap<String, TagInfo>();
-		tagMap.put("..EMAIL", new TagInfo(Const.TYPE_INTERNAL_BASE_RECORD, "FILEBODY", false, true));
+		tagMap.put("..EMAIL", new TagInfo(Const.TYPE_INTERNAL_BASE_RECORD, "MAILBODY", false, true));
 		tagMap.put("..META_SUBJECT", new TagInfo(Const.TYPE_INTERNAL_BASE_RECORD, "EMLTITLE", false, false));
 		tagMap.put("..META_DATE", new TagInfo(Const.TYPE_INTERNAL_BASE_RECORD, "EMLDATE", false, false));
 		tagMap.put("..META_FROM", new TagInfo(Const.TYPE_INTERNAL_BASE_RECORD, "EMLFROM", false, false));
@@ -203,8 +203,8 @@ public class DataRead {
 				tagInfo.getContent().append(brLine);
 			} 
 			else {
+				log.error("The filtered Tag is weird... \n root file :: " + this.runningFileName);
 				if( !brLine.isEmpty() ) {
-					log.error("The filtered Tag is weird... \n root file :: " + this.runningFileName);
 					log.error("line :: " + brLine);
 					if(records.size() > 0 ) {
 						Record record = records.get(records.size() - 1);
@@ -214,10 +214,6 @@ public class DataRead {
 					
 			}
 		}
-	}
-	public static void main(String[] args) {
-		DataRead dr = new DataRead();
-		dr.readFGFToMap("C:\\Users\\hyeyoon.cho\\git\\ks-connector-util\\ks-connector-util\\resources\\mmm");
 	}
 
 }
