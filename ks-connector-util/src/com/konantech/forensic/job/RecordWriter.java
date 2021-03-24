@@ -77,6 +77,7 @@ public class RecordWriter {
 		map.put("FILEBODY", "");
 		map.put("FILEMETA_FORMAT", "");
 		map.put("FILEMETA_SUMMARY", "");
+		map.put("FILEMETA_TITLE","");
 		map.put("FILENAME", "");
 		map.put("FILENAME_EXTENSION", "");
 		map.put("FILENAME_EXTENSION_FORGED", "");
@@ -248,11 +249,7 @@ public class RecordWriter {
 //			returnMap.put("FILEBODY" , "");
 		}
 		
-		try {
 		returnMap.put("BODYSIZE", Long.toString(returnMap.get("FILEBODY").length() + fieldValueMap.get("MAILBODY").length() ));
-		}catch(Exception e) {
-			System.out.println(e);
-		}
 
 		
 		return returnMap;

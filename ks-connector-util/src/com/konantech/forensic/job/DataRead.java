@@ -27,7 +27,6 @@ public class DataRead {
 
 	private String runningFileName = "";
 
-
 	static HashMap<String, TagInfo> TAG_MAP = createTagMap();
 
 	public static HashMap<String, TagInfo> createTagMap() {
@@ -73,7 +72,7 @@ public class DataRead {
 	private static Map<String, ArrayList<String>> FORMAT_INFO = getFormatInfo();
 
 	public static Map<String, ArrayList<String>> getFormatInfo() {
-		if(DatabaseDao.isConnectedDataSource())
+		if (DatabaseDao.isConnectedDataSource())
 			return CommonUtils.setTextFilterFormatInfo(DatabaseDao.selectTextFilterFormatInfo());
 		else
 			return new HashMap<String, ArrayList<String>>();
@@ -100,13 +99,71 @@ public class DataRead {
 	public void readFGFToMap(String filepath) {
 		this.runningFileName = filepath;
 		BufferedReader br = null;
+		String brLine = null;
 		List<Record> records = new ArrayList<Record>();
 		try {
 			br = new BufferedReader(new FileReader(new File(filepath)));
 			String root = UUID.randomUUID().toString();
+			Stack<String> parents = new Stack<String>();
+			TagInfo tagInfo = null;
 			log.info("root :: " + root + " ==> " + filepath);
+			while ((brLine = br.readLine()) != null) {
+				String key = null;
+				if ((key = isContainRecordTag(brLine)) != null) { // ..TAG 내용이 있는 line
+					tagInfo = TAG_MAP.get(key);
+					if (tagInfo == null) { // ..FILE_END:
+						parents.pop();
+						continue;
+					}
+					///////////////////// if (tagInfo.isRecordStarter()) START /////////////////////
+					if (tagInfo.isRecordStart()) { // file의 시작을 알리는 태그일 떄 (FILE, EMAIL)
+						Record record = new Record();
+						HashMap<String, TagInfo> recordTagMap = createTagMap();
+						tagInfo = recordTagMap.get(key);
+						if (key.lastIndexOf(":") != -1) {
+							String tmpTag = brLine.replace(key, "");
+							tagInfo.getContent().append(tmpTag);
+						}
+						if ("..FILE:".equals(key)) {
+							if (parents.isEmpty()) {// 최상단 파일일 때
+								record.generateKeys(root, root);
+							} else {
+								record.generateKeys(root, parents.peek());
+							}
+							parents.push(record.getPk());
+						} else if ("..EMAIL".equals(key)) {
+							record.generateKeys(root, parents.peek());
+						}
+						recordTagMap.replace(key, tagInfo);
+						record.setTagMap(recordTagMap);
+						records.add(record);
+					}
+					/////////////////////// if (tagInfo.isRecordStarter()) END
+					/////////////////////// /////////////////////////
+					else {// 그 외 태그
+						Record current = records.get(records.size() - 1);
+						tagInfo = current.getTagMap().get(key);
+//						if (key.lastIndexOf(":") != -1) {
+						if (tagInfo.isValueInLine()) {
+							tagInfo.getContent().append(brLine.replace(key, ""));
+						}
+					}
+				} else if (tagInfo != null) { // 태그 시작된 이후(tagInfo 정보 O) + 태그가 포함되지 않는 내용 line
+					if (tagInfo.getContent().length() > 0)
+						tagInfo.getContent().append("\n");
+					tagInfo.getContent().append(brLine);
+				} else {
+					log.error("The filtered Tag is weird... \n root file :: " + this.runningFileName);
+					if (!brLine.isEmpty()) {
+						log.error("line :: " + brLine);
+						if (records.size() > 0) {
+							Record record = records.get(records.size() - 1);
+							log.error("record PK :: " + record.getPk());
+						}
+					}
+				}
+			}
 
-			makeTagInfo(br, root, records, null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -131,88 +188,19 @@ public class DataRead {
 			Map<String, String> summaryMap = CommonUtils.getFileMetaSummaryMapFromString(summaryInformation);
 			c.setSummaryMap(summaryMap);
 			// 2. FILE EXTENSION
-			if(summaryMap.get("FILEMETA_FORMAT") != null) {
+			if (summaryMap.get("FILEMETA_FORMAT") != null) {
 				summaryMap.putAll(CommonUtils.setFileFormatInfo(FORMAT_INFO,
 						c.getTagMap().get("..FILE:").getContent().toString(), summaryMap.get("FILEMETA_FORMAT")));
 			}
 
 		});
 
-		
-		
-		
 		try {
 			RecordWriter rw = new RecordWriter();
 //			rw.setSaveFgfPath("C:\\Users\\hyeyoon.cho\\git\\ks-connector-util\\ks-connector-util\\dmp\\");
 			rw.writeRecordToFGF(records);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-	}
-
-	static Stack<String> parents = new Stack<String>();
-
-	public void makeTagInfo(BufferedReader br, String root, List<Record> records, TagInfo tagInfo) throws IOException {
-		String brLine = null;
-		while ((brLine = br.readLine()) != null) {
-			String key = null;
-			if ((key = isContainRecordTag(brLine)) != null) { // ..TAG 내용이 있는 line
-				tagInfo = TAG_MAP.get(key);
-				if (tagInfo == null) {
-					parents.pop();
-					continue;
-				}
-				///////////////////// if (tagInfo.isRecordStarter()) START /////////////////////
-				if (tagInfo.isRecordStart()) { // file의 시작을 알리는 태그일 떄 (FILE, EMAIL)
-					Record record = new Record();
-					HashMap<String, TagInfo> recordTagMap = createTagMap();
-					tagInfo = recordTagMap.get(key);
-					if (key.lastIndexOf(":") != -1) {
-						String tmpTag = brLine.replace(key, "");
-						tagInfo.getContent().append(tmpTag);
-					}
-					if ("..FILE:".equals(key)) {
-						if (parents.isEmpty()) {// 최상단 파일일 때
-							record.generateKeys(root, root);
-						} else {
-							record.generateKeys(root, parents.peek());
-						}
-						parents.push(record.getPk());
-					} else if ("..EMAIL".equals(key)) {
-						record.generateKeys(root, parents.peek());
-					}
-					recordTagMap.replace(key, tagInfo);
-					record.setTagMap(recordTagMap);
-					records.add(record);
-				}
-				/////////////////////// if (tagInfo.isRecordStarter()) END
-				/////////////////////// /////////////////////////
-				else {// 그 외 태그
-					Record current = records.get(records.size() - 1);
-					tagInfo = current.getTagMap().get(key);
-//					if (key.lastIndexOf(":") != -1) {
-					if (tagInfo.isValueInLine()) {
-						tagInfo.getContent().append(brLine.replace(key, ""));
-					}
-				}
-				makeTagInfo(br, root, records, tagInfo); // Recursive
-			} else if (tagInfo != null) { // 태그 시작된 이후(tagInfo 정보 O) + 태그가 포함되지 않는 내용 line
-				if (tagInfo.getContent().length() > 0)
-					tagInfo.getContent().append("\n");
-				tagInfo.getContent().append(brLine);
-			} 
-			else {
-				log.error("The filtered Tag is weird... \n root file :: " + this.runningFileName);
-				if( !brLine.isEmpty() ) {
-					log.error("line :: " + brLine);
-					if(records.size() > 0 ) {
-						Record record = records.get(records.size() - 1);
-						log.error("record PK :: " + record.getPk());
-					}
-				}
-					
-			}
 		}
 	}
 
